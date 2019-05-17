@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVo;
@@ -26,7 +25,6 @@ public class UserController {
 		return "user/join";
 	}
 	
-	@ResponseBody
 	@RequestMapping(value="/join", method=RequestMethod.POST)
 	public String join(@ModelAttribute UserVo userVo) {
 		
@@ -35,7 +33,6 @@ public class UserController {
 		return "redirect:/user/joinsuccess";
 	}
 	
-	@ResponseBody
 	@RequestMapping("/joinsuccess")
 	public String joinSuccess() {
 		return "user/joinsuccess";
@@ -76,5 +73,12 @@ public class UserController {
 		
 		return "redirect:/";
 	}
+	
+//	@ExceptionHandler( UserDaoException.class )
+//	public String handleUserDaoException() {
+//		System.out.println("!!!!!!!!!!!!");
+//		return "error/exception";
+//	}
+
 	
 }

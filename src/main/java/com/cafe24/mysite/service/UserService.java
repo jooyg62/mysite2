@@ -17,7 +17,7 @@ public class UserService {
 	}
 	
 	public UserVo getUser(Long no) {
-		return userDao.get(no); 
+		return userDao.get(no);
 	}
 	
 	public UserVo getUser(UserVo userVo) {

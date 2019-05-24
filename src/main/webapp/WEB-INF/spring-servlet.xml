@@ -9,24 +9,49 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-
 	<!-- 이 파일은 web application Context의 설정을 담당한다. -->
+	
+	<!-- auto proxy -->
+	<aop:aspectj-autoproxy />
+	
+	<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
+	<mvc:default-servlet-handler />
+
+	<!-- Validator, conversionservice, Formatter Message Converter 설정 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+			   <property name="supportedMediaTypes">
+			       <list>
+			            <value>application/json; charset=UTF-8</value>
+			        </list>
+			   </property>
+			</bean>
+		</mvc:message-converters>
+		
+		<!-- Argument Resolver -->
+		<mvc:argument-resolvers>
+			<bean class="com.cafe24.mysite.security.AuthUserHandlerMethodArgumentResolver" />
+		</mvc:argument-resolvers>
+		
+	</mvc:annotation-driven>
 
 	<!-- 빈설정을 annotation으로 하겠다.(@Controller에 auto scanning) -->
 	<context:annotation-config />
 
-	<!-- 1. Controller Scanning 하는 base package 지정 
+	<!-- Controller Scanning 하는 base package 지정 
 	HM 대신 스캔하기 때문에 자동으로 HM 테이블 구조가 만들어 진다.(HM 설정을 해줄 필요가 없어짐) -->
-	<context:component-scan	base-package="com.cafe24.mysite.controller, com.cafe24.mysite.exception" />
+	<context:component-scan	base-package="com.cafe24.mysite.controller,com.cafe24.mysite.controller.api, com.cafe24.mysite.exception" />
 	
-	<!-- validator, conversionService, messageConverter 이 설정이 없으면 디폴트 서블릿 핸들러도 
-		동작하지 않는다. -->
-	<mvc:annotation-driven />
-
-	<!-- 2. 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
-	<mvc:default-servlet-handler />
-	
-	<!-- 3. ViewResolver 설정  -->
+	<!-- ViewResolver 설정  -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"	value="org.springframework.web.servlet.view.JstlView" />
@@ -34,6 +59,58 @@
 		<property name="suffix" value=".jsp" />
 		<property name="order" value="1" />
 	</bean>
+	
+	<!-- Interceptors 설정 -->
+    <mvc:interceptors>
+        <!-- mvc:interceptor>
+        	<mvc:mapping path="/guestbook/**" /> 
+    	<bean class="com.cafe24.mysite.interceptor.MyInterceptor02" />
+        </mvc:interceptor-->
+        <mvc:interceptor>
+        	<mvc:mapping path="/user/auth" /> 
+    	<bean class="com.cafe24.mysite.security.AuthLoginInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+        	<mvc:mapping path="/user/logout" /> 
+    	<bean class="com.cafe24.mysite.security.AuthLogoutInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+        	<mvc:mapping path="/board/**" />
+    	<bean class="com.cafe24.mysite.security.AuthBoardInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+        	<mvc:mapping path="/**" />
+        	<mvc:exclude-mapping path="user/auth"/>
+        	<mvc:exclude-mapping path="user/logout"/>
+        	<mvc:exclude-mapping path="board/**"/>
+        	<mvc:exclude-mapping path="/assets/**"/>
+    	<bean class="com.cafe24.mysite.security.AuthInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
 
+	<!-- MessageSource 설정 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages/messages_ko</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- the mvc resources url mapping -->
+	<!-- 요청 URL의 리소스 위치를 실제 물리적인 위치와 매핑한다. -->
+	<mvc:resources mapping="/images/**" location="file:/mysite-uploads/" />
+	
+	<!-- 멀티파트 리졸버 -->
+	<bean id="multipartResolver" 
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 최대업로드 가능한 바이트크기 -->
+		<property name="maxUploadSize" value="52428800" />
+		<!-- 디스크에 임시 파일을 생성하기 전에 메모리에 보관할수있는 최대 바이트 크기 -->
+		<!-- property name="maxInMemorySize" value="52428800" /-->
+		<!-- defaultEncoding -->
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>	
 
 </beans>

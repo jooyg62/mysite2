@@ -16,6 +16,10 @@ public class UserDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	public UserVo get(String email) {
+		return sqlSession.selectOne("user.getByEmail", email);
+	}
+	
 	public Boolean delete(UserVo vo) {
 		int count = sqlSession.delete("user.deleteUser", vo);
 		return 1 == count;
@@ -42,4 +46,5 @@ public class UserDao {
 		
 		return userVo;
 	}
+
 }

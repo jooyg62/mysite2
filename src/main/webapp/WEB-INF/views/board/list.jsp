@@ -85,10 +85,9 @@ $(function() {
 				pager 추가 -->
 				
 				<div class="bottom">
-				<a href="${pageContext.servletContext.contextPath}/board/write" id="new-book">글쓰기</a>
-					<%-- <c:if test='${not empty authUser}'>
+					<c:if test='${not empty authUser}'>
 						<a href="${pageContext.servletContext.contextPath}/board/write" id="new-book">글쓰기</a>
-					</c:if> --%>
+					</c:if>
 				</div>				
 			</div>
 		</div>

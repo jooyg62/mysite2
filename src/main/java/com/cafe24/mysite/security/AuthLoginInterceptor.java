@@ -13,9 +13,6 @@ import com.cafe24.mysite.vo.UserVo;
 
 public class AuthLoginInterceptor extends HandlerInterceptorAdapter {
 
-//	@Autowired
-//	private UserService userService;
-	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {

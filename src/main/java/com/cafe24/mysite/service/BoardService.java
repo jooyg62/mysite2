@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cafe24.mysite.repository.BoardDao;
 import com.cafe24.mysite.vo.BoardVo;
 import com.cafe24.mysite.vo.FileVo;
+import com.cafe24.mysite.vo.UserVo;
 
 @Service
 public class BoardService {
@@ -57,6 +58,14 @@ public class BoardService {
 
 	public int getBoardTotalCount(String keyword) {
 		return boardDao.getBoardTotalCount(keyword);
+	}
+	
+	public boolean isCheckMyBoard(Long boardUserNo, UserVo authUser) {
+		if(authUser == null && authUser.getNo() != boardUserNo) {
+			return false;
+		}
+		
+		return true;
 	}
 
 }

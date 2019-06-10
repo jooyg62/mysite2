@@ -1,15 +1,16 @@
 package com.cafe24.mysite.security;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
+ * 
  * AuthUserHandlerMethodArgumentResolver
- * @author BIT
- *
+ * 
  */
-@Retention(RUNTIME)
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface AuthUser {
 
 }

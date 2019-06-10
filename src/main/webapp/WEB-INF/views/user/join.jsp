@@ -38,6 +38,7 @@
 					
 					<label class="block-label" for="email">이메일</label>
 					<form:input path='email' />
+					
 					<input id='check-button' type="button" value="체크">	
 					<img style="display:none" id='check-image' src="${pageContext.servletContext.contextPath}/assets/images/check.png" />
 					<p style="font-weight:bold; color:#f00; text-align:left; padding:0; margin:0;">

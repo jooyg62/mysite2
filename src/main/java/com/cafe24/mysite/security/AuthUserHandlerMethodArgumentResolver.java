@@ -18,7 +18,7 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 	public Object resolveArgument(
 		MethodParameter parameter,
 		ModelAndViewContainer mavContainer,
-		NativeWebRequest webRequest,/*httpServlet은 톰캣용 이다.*/
+		NativeWebRequest webRequest,
 		WebDataBinderFactory binderFactory) throws Exception {
 		
 		if( supportsParameter(parameter) == false ) {

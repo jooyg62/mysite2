@@ -75,14 +75,9 @@
     	<bean class="com.cafe24.mysite.security.AuthLogoutInterceptor" />
         </mvc:interceptor>
         <mvc:interceptor>
-        	<mvc:mapping path="/board/**" />
-    	<bean class="com.cafe24.mysite.security.AuthBoardInterceptor" />
-        </mvc:interceptor>
-        <mvc:interceptor>
         	<mvc:mapping path="/**" />
         	<mvc:exclude-mapping path="user/auth"/>
         	<mvc:exclude-mapping path="user/logout"/>
-        	<mvc:exclude-mapping path="board/**"/>
         	<mvc:exclude-mapping path="/assets/**"/>
     	<bean class="com.cafe24.mysite.security.AuthInterceptor" />
         </mvc:interceptor>

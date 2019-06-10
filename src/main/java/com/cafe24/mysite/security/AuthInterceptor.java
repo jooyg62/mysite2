@@ -1,15 +1,11 @@
 package com.cafe24.mysite.security;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.ElementType;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler;
 
 import com.cafe24.mysite.vo.UserVo;
 
@@ -21,6 +17,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response,
 			Object handler)
 			throws Exception {
+		
+		System.out.println("############################# " + this.getClass().toString());
 		
 		//1. handler 종류 확인
 		if( handler instanceof HandlerMethod == false ) {
@@ -65,14 +63,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		
 		//8. role이 Auth.Role.USER 라면,
 		//   인증된 모든 사용자는 접근
-//		if( role == Auth.Role.USER ) {
-//			return true;
-//		}
+		if( role == Auth.Role.USER ) {
+			return true;
+		}
 		
 		//9. Admin Role 권한 체크
-		//
-		// authUser.getRole().equals("ADMIN")
-		//
+		if( role == Auth.Role.ADMIN && authUser.getRole().equals("ADMIN") == false) {
+			return false;
+		}
 		
 		return true;
 	}

@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,11 +39,9 @@ public class BoardController {
 	public String list(
 			@RequestParam(value="kwd", required=false, defaultValue="") String keyword,
 			@RequestParam(value="p", required=false, defaultValue="1") int pageNo,
-			HttpSession session,
+			@AuthUser UserVo authUser,
 			Model model
 	) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		
 		int boardTotalCount = boardService.getBoardTotalCount(keyword);
 		
 		//(게시글 총수)/(페이지 사이즈)+1 = 전체 페이지 범위 총 수
@@ -74,11 +71,9 @@ public class BoardController {
 			@PathVariable Long no,
 			HttpServletRequest request,
 			HttpServletResponse response,
-			HttpSession session,
+			@AuthUser UserVo authUser,
 			Model model
 	) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		
 		if(authUser != null) {
 			model.addAttribute("authUser", authUser);
 		}
@@ -120,9 +115,12 @@ public class BoardController {
 	/**
 	 * 게시글 삭제
 	 */
-	@Auth
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value="/delete/{no}/{userNo}", method=RequestMethod.GET)
-	public String delete(@PathVariable Long no) {
+	public String delete(@PathVariable Long no, @AuthUser UserVo authUser) {
+		
+//		boardService.isCheckMyBoard(authUser, no);
+		
 		boardService.deleteBoard(no);
 		
 		return "redirect:/board";
@@ -132,28 +130,24 @@ public class BoardController {
 	 * 게시글 작성 화면 이동
 	 * @return
 	 */
-	@Auth
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping("/write")
-	public String write(HttpSession session) {
+	public String write() {
 		return "board/write";
 	}
 	
 	/**
 	 * 게시글 작성
 	 * @param boardVo
-	 * @param session
 	 * @return
 	 */
-	@Auth
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public String insert(
 			@ModelAttribute BoardVo boardVo,
-			HttpSession session
+			@AuthUser UserVo authUser
 	) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		
-		Long userNo = authUser.getNo();
-		boardVo.setUserNo(userNo);
+		boardVo.setUserNo(authUser.getNo());
 		
 		boardService.writeBoard(boardVo);
 		
@@ -173,7 +167,7 @@ public class BoardController {
 	 * 게시글 수정 화면 접근
 	 * @return
 	 */
-	@Auth
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value="/modify/{no}", method=RequestMethod.GET)
 	public String modifyView(
 			@PathVariable Long no,
@@ -190,13 +184,12 @@ public class BoardController {
 	 * 게시글 수정
 	 * @return
 	 */
-	@Auth
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value="/modify/{no}/{userNo}", method=RequestMethod.POST)
 	public String modify(
 			@PathVariable Long no,
 			@PathVariable Long userNo,
 			@ModelAttribute BoardVo boardVo,
-			HttpSession session,
 			Model model
 		) {
 		boardService.modifyBoard(boardVo);

@@ -8,9 +8,9 @@
 		<typeAlias alias="sitevo" type="com.cafe24.mysite.vo.SiteVo"/>
     </typeAliases>
 	<mappers>
-		<mapper resource="mybatis/mappers/user.xml" />
-		<mapper resource="mybatis/mappers/guestbook.xml" />
-		<mapper resource="mybatis/mappers/board.xml" />
-		<mapper resource="mybatis/mappers/main.xml" />
+		<mapper resource="mybatis/mariadb/mappers/user.xml" />
+		<mapper resource="mybatis/mariadb/mappers/guestbook.xml" />
+		<mapper resource="mybatis/mariadb/mappers/board.xml" />
+		<mapper resource="mybatis/mariadb/mappers/main.xml" />
 	</mappers>
 </configuration>

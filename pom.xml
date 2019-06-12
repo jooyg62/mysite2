@@ -155,6 +155,9 @@
 		</dependency>
 		
 	</dependencies>
+
+
+
 	
 	<profiles>
 		<profile>
@@ -204,6 +207,16 @@
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<!-- these resources will be excluded from the classpath; they will not 
+						go in to the target/classes folder and will not be packaged into the artifact -->
+					<exclude>**/*</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -240,4 +253,6 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	
 </project>

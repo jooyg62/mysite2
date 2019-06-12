@@ -16,7 +16,7 @@
 				no,
 				name,
 				contents,
-				date_format(reg_date, '%Y-%m-%d')
+				to_char(reg_date, 'YYYY-mm-dd')
 			from guestbook
 			order by reg_date desc
 		]]>
@@ -28,7 +28,7 @@
 				no,
 				name,
 				contents,
-				date_format(reg_date, '%Y-%m-%d')
+				to_char(reg_date, 'YYYY-mm-dd')
 			from guestbook
 			order by reg_date desc
 		]]>
